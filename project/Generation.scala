@@ -32,6 +32,8 @@ object Generation {
         }
     }.value,
     generateCached := Def.taskDyn {
+      val fileName = "hello-file"
+      val output   = (resourceDirectory in Compile).value / fileName
       val cacheDir = target.value / "generate-swagger-cache"
       val files = {
         val mainSrcScalaDir = (scalaSource in Compile).value
@@ -42,8 +44,8 @@ object Generation {
       cachedFileTask(
         fileInfoCacheDir = cacheDir,
         filesToWatch = files.toSet,
-        taskKey = generateUncached,
-        state = state.value
+        output = Set(output),
+        taskKey = generateUncached
       )
     }.value,
     /*
